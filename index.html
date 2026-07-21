@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#82DC28">
+<meta name="apple-mobile-web-app-title" content="송금&환전계산기">
+<meta name="application-name" content="송금&환전계산기">
+<link rel="apple-touch-icon" href="icon-180.png">  
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<title>통합 송금 & 환전 계산기</title>
+<style>
+:root {
+  --main-color: #82DC28;
+  --main-dark: #68b31f;
+  --sub-color: #FF7878;
+  --sub-dark: #e05e5e;
+  --bg-color: #f7f9f6;
+  --card-bg: #ffffff;
+  --text-primary: #333333;
+  --text-muted: #666666;
+  --border-color: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+}
+
+body {
+  background: var(--bg-color);
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 탭 스타일 */
+.tab-group {
+  display: flex;
+  background: #e9efe6;
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background: var(--card-bg);
+  color: var(--main-dark);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* 카드 및 레이아웃 */
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+h1 {
+  text-align: center;
+  color: var(--main-dark);
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.label {
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+/* 입력 필드 공통 */
+input[type="number"] {
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"]:focus {
+  border-color: var(--main-color);
+}
+
+.target-input {
+  height: 42px;
+  font-size: 18px !important;
+  font-weight: bold;
+  border: 2px solid var(--main-color) !important;
+  border-radius: 10px !important;
+}
+
+/* 테이블 & 그리드 */
+.grid-header, .grid-row {
+  display: grid;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 송금용 헤더/로우 */
+.remit-grid {
+  grid-template-columns: 60px 32px 1fr 32px 1.2fr;
+}
+
+/* 환전용 헤더/로우 */
+.ex-grid {
+  grid-template-columns: 55px 1fr 120px;
+}
+
+.grid-header {
+  font-size: 12px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.grid-row {
+  padding: 5px 0;
+  border-bottom: 1px solid #f2f5f1;
+}
+
+.grid-row:last-child {
+  border-bottom: none;
+}
+
+.denom {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.amount {
+  text-align: right;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 14px;
+  word-break: break-all;
+}
+
+/* 컨트롤 버튼 */
+.ctrl-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--main-color);
+  color: #fff;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ctrl-btn:active {
+  background: var(--main-dark);
+}
+
+.ctrl-btn.minus {
+  background: #e2e8f0;
+  color: #555;
+}
+
+.ctrl-btn.minus:active {
+  background: #cbd5e1;
+}
+
+/* 수량/묶음 컨트롤 박스 (환전용) */
+.qty-ctrl-box {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  justify-content: flex-end;
+}
+
+.qty-ctrl-box input {
+  width: 48px;
+  height: 32px;
+  text-align: center;
+}
+
+.unit-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-left: 2px;
+}
+
+/* 요약 영역 */
+.summary-box {
+  background: #f0f8e8;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.summary-title {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.total-amount {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--main-dark);
+}
+
+.diff-amount {
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.status-badge {
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.status-badge.match { background: #e2f7d2; color: #3b7109; }
+.status-badge.short { background: #ffebeb; color: var(--sub-dark); }
+.status-badge.over { background: #e3f2fd; color: #0d47a1; }
+
+.notice {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* 하단 버튼 그룹 */
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn-reset {
+  flex: 1;
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  background: var(--sub-color);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s;
+}
+
+.btn-reset:active {
+  background: var(--sub-dark);
+}
+
+/* 토스트 메세지 */
+#toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(34, 34, 34, 0.9);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 24px;
+  display: none;
+  z-index: 9999;
+  font-size: 14px;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- 상단 탭 버튼 -->
+  <div class="tab-group">
+    <button class="tab-btn active" onclick="switchTab('remit')">송금 계산기</button>
+    <button class="tab-btn" onclick="switchTab('exchange')">환전 계산기</button>
+  </div>
+
+  <!-- 1. 송금 계산기 탭 -->
+  <div id="tab-remit" class="tab-content active">
+    <div class="card">
+      <h1>송금대상액 계산기</h1>
+      <div class="label">송금대상금액</div>
+      <input id="remitTarget" class="target-input" type="number" placeholder="금액 입력">
+    </div>
+
+    <div class="card">
+      <div class="grid-header remit-grid">
+        <div>권종</div>
+        <div></div>
+        <div style="text-align: center;">수량</div>
+        <div></div>
+        <div style="text-align: right;">금액</div>
+      </div>
+      <div id="remitList"></div>
+
+      <div class="summary-box">
+        <div class="summary-title">합계 금액</div>
+        <div id="remitTotal" class="total-amount">0원</div>
+        <div id="remitDiff" class="diff-amount">차이 : 0원</div>
+        <div id="remitStatus" class="status-badge match">🟢 정확히 일치</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 환전 계산기 탭 -->
+  <div id="tab-exchange" class="tab-content">
+    <div class="card">
+      <h1>환전 계산기</h1>
+      <div class="grid-header ex-grid">
+        <div>권종</div>
+        <div style="text-align: right; padding-right: 8px;">금액</div>
+        <div style="text-align: right;">수량/묶음</div>
+      </div>
+      <div id="exchangeList"></div>
+
+      <div class="summary-box" style="background: #f0f8e8; margin-top: 14px;">
+        <div class="summary-title">총 환전금액</div>
+        <div id="exchangeTotal" class="total-amount">0원</div>
+      </div>
+      <div class="notice">📸 캡쳐해서 사용하세요!</div>
+    </div>
+  </div>
+
+  <!-- 공통 초기화 버튼 -->
+  <div class="actions">
+    <button class="btn-reset" onclick="resetCurrentTab()">🏠 초기화</button>
+  </div>
+
+</div>
+
+<div id="toast">초기화되었습니다</div>
+
+<script>
+// --- 데이터 정의 ---
+const remitData = [
+  { label: "10만원", value: 100000 },
+  { label: "5만원", value: 50000 },
+  { label: "1만원", value: 10000 },
+  { label: "5천원", value: 5000 },
+  { label: "1천원", value: 1000 },
+  { label: "500원", value: 500 },
+  { label: "100원", value: 100 },
+  { label: "50원", value: 50 },
+  { label: "10원", value: 10 }
+];
+
+const exchangeData = [
+  { id: "m10000", label: "1만원", unitVal: 10000, step: 1, unit: "장" },
+  { id: "m5000", label: "5천원", unitVal: 5000, step: 1, unit: "장" },
+  { id: "m1000", label: "1천원", unitVal: 1000, step: 10, unit: "장" },
+  { id: "m500", label: "500원", unitVal: 20000, step: 1, unit: "묶음" },
+  { id: "m100", label: "100원", unitVal: 5000, step: 1, unit: "묶음" },
+  { id: "m50", label: "50원", unitVal: 2500, step: 1, unit: "묶음" },
+  { id: "m10", label: "10원", unitVal: 500, step: 1, unit: "묶음" }
+];
+
+let activeTab = 'remit';
+
+// --- DOM 요소를 렌더링 ---
+function initDOM() {
+  // 송금 계산기 리스트 생성
+  const remitListEl = document.getElementById("remitList");
+  let remitHtml = "";
+  remitData.forEach((item, idx) => {
+    remitHtml += `
+      <div class="grid-row remit-grid">
+        <div class="denom">${item.label}</div>
+        <button class="ctrl-btn minus" onclick="chgRemit(${idx}, -1)">-</button>
+        <input type="number" id="remit-qty-${idx}" placeholder="0" min="0" oninput="calcRemit()">
+        <button class="ctrl-btn" onclick="chgRemit(${idx}, 1)">+</button>
+        <div class="amount" id="remit-amt-${idx}">0원</div>
+      </div>
+    `;
+  });
+  remitListEl.innerHTML = remitHtml;
+
+  // 환전 계산기 리스트 생성
+  const exListEl = document.getElementById("exchangeList");
+  let exHtml = "";
+  exchangeData.forEach((item) => {
+    exHtml += `
+      <div class="grid-row ex-grid">
+        <div class="denom">${item.label}</div>
+        <div class="amount" id="ex-amt-${item.id}">0원</div>
+        <div class="qty-ctrl-box">
+          <button class="ctrl-btn minus" onclick="chgEx('${item.id}', -${item.step})">-</button>
+          <input type="number" id="ex-input-${item.id}" placeholder="0" min="0" oninput="calcEx()">
+          <button class="ctrl-btn" onclick="chgEx('${item.id}', ${item.step})">+</button>
+          <span class="unit-label">${item.unit}</span>
+        </div>
+      </div>
+    `;
+  });
+  exListEl.innerHTML = exHtml;
+
+  // 대상 금액 입력 이벤트
+  document.getElementById("remitTarget").addEventListener("input", calcRemit);
+
+  // 로컬 스토리지 데이터 복원
+  loadSavedData();
+}
+
+// --- 탭 전환 ---
+function switchTab(tabName) {
+  activeTab = tabName;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+  if (tabName === 'remit') {
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    document.getElementById('tab-remit').classList.add('active');
+  } else {
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    document.getElementById('tab-exchange').classList.add('active');
+  }
+}
+
+// --- 송금 계산기 연산 ---
+function chgRemit(idx, delta) {
+  const input = document.getElementById(`remit-qty-${idx}`);
+  let val = parseInt(input.value) || 0;
+  val = Math.max(0, val + delta);
+  input.value = val === 0 ? "" : val; // 0일 경우 빈 문자열로 처리
+  calcRemit();
+}
+
+function calcRemit() {
+  let total = 0;
+  remitData.forEach((item, idx) => {
+    const input = document.getElementById(`remit-qty-${idx}`);
+    if (+input.value < 0) input.value = "";
+    
+    const qty = Number(input.value) || 0;
+    const amt = qty * item.value;
+    total += amt;
+    document.getElementById(`remit-amt-${idx}`).textContent = amt.toLocaleString() + "원";
+  });
+
+  document.getElementById("remitTotal").textContent = total.toLocaleString() + "원";
+
+  const targetInput = document.getElementById("remitTarget");
+  if (+targetInput.value < 0) targetInput.value = "";
+  const target = Number(targetInput.value) || 0;
+  const diff = target - total;
+
+  const diffEl = document.getElementById("remitDiff");
+  const statusEl = document.getElementById("remitStatus");
+
+  diffEl.textContent = "차이 : " + diff.toLocaleString() + "원";
+  statusEl.className = "status-badge";
+
+  if (diff === 0) {
+    statusEl.classList.add("match");
+    statusEl.textContent = "🟢 정확히 일치";
+  } else if (diff > 0) {
+    statusEl.classList.add("short");
+    statusEl.textContent = `🔴 ${diff.toLocaleString()}원 부족`;
+  } else {
+    statusEl.classList.add("over");
+    statusEl.textContent = `🔵 ${Math.abs(diff).toLocaleString()}원 초과`;
+  }
+
+  saveData();
+}
+
+// --- 환전 계산기 연산 ---
+function chgEx(id, delta) {
+  const input = document.getElementById(`ex-input-${id}`);
+  let val = parseInt(input.value) || 0;
+  val = Math.max(0, val + delta);
+  input.value = val === 0 ? "" : val; // 0일 경우 빈 문자열로 처리
+  calcEx();
+}
+
+function calcEx() {
+  let total = 0;
+  exchangeData.forEach((item) => {
+    const input = document.getElementById(`ex-input-${item.id}`);
+    if (+input.value < 0) input.value = "";
+
+    const qty = Number(input.value) || 0;
+    const amt = qty * item.unitVal;
+    total += amt;
+    document.getElementById(`ex-amt-${item.id}`).textContent = amt.toLocaleString() + "원";
+  });
+
+  document.getElementById("exchangeTotal").textContent = total.toLocaleString() + "원";
+  saveData();
+}
+
+// --- 로컬 스토리지 저장 및 불러오기 ---
+function saveData() {
+  const remitQtys = remitData.map((_, idx) => document.getElementById(`remit-qty-${idx}`).value);
+  const remitTarget = document.getElementById("remitTarget").value;
+  const exQtys = exchangeData.map(item => document.getElementById(`ex-input-${item.id}`).value);
+
+  const data = { remitQtys, remitTarget, exQtys };
+  localStorage.setItem("mergedCalcData", JSON.stringify(data));
+}
+
+function loadSavedData() {
+  const saved = localStorage.getItem("mergedCalcData");
+  if (!saved) return;
+
+  try {
+    const data = JSON.parse(saved);
+    if (data.remitTarget) document.getElementById("remitTarget").value = data.remitTarget;
+    if (data.remitQtys) {
+      data.remitQtys.forEach((val, idx) => {
+        const el = document.getElementById(`remit-qty-${idx}`);
+        if (el) el.value = val;
+      });
+    }
+    if (data.exQtys) {
+      exchangeData.forEach((item, idx) => {
+        const el = document.getElementById(`ex-input-${item.id}`);
+        if (el && data.exQtys[idx]) el.value = data.exQtys[idx];
+      });
+    }
+  } catch (e) {
+    console.error("데이터 복원 실패", e);
+  }
+
+  calcRemit();
+  calcEx();
+}
+
+// --- 초기화 ---
+function resetCurrentTab() {
+  if (activeTab === 'remit') {
+    document.getElementById("remitTarget").value = "";
+    remitData.forEach((_, idx) => {
+      document.getElementById(`remit-qty-${idx}`).value = "";
+    });
+    calcRemit();
+  } else {
+    exchangeData.forEach((item) => {
+      document.getElementById(`ex-input-${item.id}`).value = "";
+    });
+    calcEx();
+  }
+  showToast('초기화되었습니다');
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.innerText = msg;
+  toast.style.display = 'block';
+  if (window.toastTimeout) clearTimeout(window.toastTimeout);
+  window.toastTimeout = setTimeout(() => toast.style.display = 'none', 2000);
+}
+
+// 시작
+document.addEventListener("DOMContentLoaded", initDOM);
+</script>
+</body>
+</html>
