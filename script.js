@@ -201,9 +201,11 @@ function resetCurrentTab() {
     });
     calcRemit();
   } else {
+    document.getElementById("remitTarget").value = "";
     exchangeData.forEach((item) => {
       document.getElementById(`ex-input-${item.id}`).value = "";
     });
+    calcRemit();
     calcEx();
   }
   showToast('초기화되었습니다');
