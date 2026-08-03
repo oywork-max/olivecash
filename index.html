@@ -1,11 +1,11 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#82DC28">
-  <meta name="apple-mobile-web-app-title" content="송금&환전계산기">
-  <meta name="application-name" content="송금&환전계산기">
+  <meta name="apple-mobile-web-app-title" content="OLIVE CASH">
+  <meta name="application-name" content="OLIVE CASH">
   
   <link rel="apple-touch-icon" href="icon-180.png">  
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -17,20 +17,23 @@
 <body>
 
   <div class="wrap">
+    <!-- 타이틀 -->
+    <h1 class="main-title">OLIVE CASH</h1>
+
     <!-- 상단 탭 버튼 -->
     <div class="tab-group">
       <button class="tab-btn active" onclick="switchTab('remit')">송금 계산기</button>
       <button class="tab-btn" onclick="switchTab('exchange')">환전 계산기</button>
     </div>
 
+    <!-- 공통: 항상 상단에 표시되는 송금대상금액 입력 카드 -->
+    <div class="card">
+      <div class="label">송금대상금액</div>
+      <input id="remitTarget" class="target-input" type="number" placeholder="금액 입력">
+    </div>
+
     <!-- 1. 송금 계산기 탭 -->
     <div id="tab-remit" class="tab-content active">
-      <div class="card">
-        <h1>송금대상액 계산기</h1>
-        <div class="label">송금대상금액</div>
-        <input id="remitTarget" class="target-input" type="number" placeholder="금액 입력">
-      </div>
-
       <div class="card">
         <div class="grid-header remit-grid">
           <div>권종</div>
@@ -53,7 +56,6 @@
     <!-- 2. 환전 계산기 탭 -->
     <div id="tab-exchange" class="tab-content">
       <div class="card">
-        <h1>환전 계산기</h1>
         <div class="grid-header ex-grid">
           <div>권종</div>
           <div style="text-align: right; padding-right: 8px;">금액</div>
