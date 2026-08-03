@@ -34,6 +34,16 @@ body {
   gap: 12px;
 }
 
+/* 메인 타이틀 */
+.main-title {
+  text-align: center;
+  color: var(--main-dark);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-top: 4px;
+}
+
 /* 탭 스타일 */
 .tab-group {
   display: flex;
@@ -68,13 +78,6 @@ body {
   border-radius: 16px;
   padding: 14px 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-h1 {
-  text-align: center;
-  color: var(--main-dark);
-  font-size: 20px;
-  margin-bottom: 12px;
 }
 
 .label {
