@@ -19,46 +19,50 @@
 
 body {
   background: var(--bg-color);
-  padding: 12px;
+  padding: 8px;
   display: flex;
   justify-content: center;
   min-height: 100vh;
 }
 
+/* 전체 높이 5% 축소 및 PC 웹앱에서 90% 사이즈 최적화 */
 .wrap {
-  width: 100%;
-  max-width: 420px;
+  width: 90%;
+  max-width: 390px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
-/* 메인 타이틀 */
-.main-title {
+/* 헤더 로고 스타일 */
+.logo {
   text-align: center;
-  color: var(--main-dark);
-  font-size: 22px;
-  font-weight: 800;
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 900;
   letter-spacing: -0.5px;
-  margin-top: 4px;
+  margin: 2px 0;
+}
+.logo span {
+  color: var(--main-dark);
 }
 
 /* 탭 스타일 */
 .tab-group {
   display: flex;
   background: #e9efe6;
-  border-radius: 12px;
-  padding: 4px;
-  gap: 4px;
+  border-radius: 10px;
+  padding: 3px;
+  gap: 3px;
 }
 
 .tab-btn {
   flex: 1;
-  padding: 10px 0;
+  padding: 8px 0;
   border: none;
   background: transparent;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-muted);
   border-radius: 8px;
@@ -75,16 +79,23 @@ body {
 /* 카드 및 레이아웃 */
 .card {
   background: var(--card-bg);
-  border-radius: 16px;
-  padding: 14px 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .label {
   font-weight: 700;
-  margin-bottom: 6px;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-primary);
+}
+
+/* 송금대상금액 좌우 구조 변경 */
+.flex-input-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
 }
 
 /* 입력 필드 공통 */
@@ -92,8 +103,8 @@ input[type="number"] {
   width: 100%;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 6px 10px;
-  font-size: 15px;
+  padding: 5px 8px;
+  font-size: 14px;
   outline: none;
   transition: border-color 0.2s;
   -moz-appearance: textfield;
@@ -110,41 +121,41 @@ input[type="number"]:focus {
 }
 
 .target-input {
-  height: 42px;
-  font-size: 18px !important;
+  width: 170px !important;
+  height: 38px;
+  font-size: 16px !important;
   font-weight: bold;
+  text-align: right;
   border: 2px solid var(--main-color) !important;
-  border-radius: 10px !important;
+  border-radius: 8px !important;
 }
 
 /* 테이블 & 그리드 */
 .grid-header, .grid-row {
   display: grid;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
-/* 송금용 헤더/로우 */
 .remit-grid {
-  grid-template-columns: 60px 32px 1fr 32px 1.2fr;
+  grid-template-columns: 50px 28px 1fr 28px 1.1fr;
 }
 
-/* 환전용 헤더/로우 */
 .ex-grid {
-  grid-template-columns: 55px 1fr 120px;
+  grid-template-columns: 50px 1fr 110px;
 }
 
 .grid-header {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
   border-bottom: 1px solid var(--border-color);
-  padding-bottom: 6px;
-  margin-bottom: 6px;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
   text-align: center;
 }
 
 .grid-row {
-  padding: 5px 0;
+  padding: 4px 0;
   border-bottom: 1px solid #f2f5f1;
 }
 
@@ -152,30 +163,53 @@ input[type="number"]:focus {
   border-bottom: none;
 }
 
+/* 아이콘 디자인 (지폐 / 동전) */
 .denom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 700;
-  font-size: 14px;
-  color: var(--text-primary);
+  font-size: 11px;
+}
+
+/* 10만원~1천원: 네모난 지폐 모양 */
+.denom-bill {
+  width: 46px;
+  height: 24px;
+  background: #eefbee;
+  border: 1.5px solid var(--main-dark);
+  color: var(--main-dark);
+  border-radius: 4px;
+}
+
+/* 500원~10원: 라운드형 도형 */
+.denom-coin {
+  width: 32px;
+  height: 26px;
+  background: #edf2f7;
+  border: 1.5px solid #cbd5e1;
+  color: #475569;
+  border-radius: 13px;
 }
 
 .amount {
   text-align: right;
   font-weight: 700;
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 13px;
   word-break: break-all;
 }
 
 /* 컨트롤 버튼 */
 .ctrl-btn {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border: none;
   background: var(--main-color);
   color: #fff;
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -205,50 +239,56 @@ input[type="number"]:focus {
 }
 
 .qty-ctrl-box input {
-  width: 48px;
-  height: 32px;
+  width: 42px;
+  height: 28px;
   text-align: center;
 }
 
 .unit-label {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
   margin-left: 2px;
 }
 
-/* 요약 영역 */
+/* 요약 영역 구조 변경 */
 .summary-box {
   background: #f0f8e8;
-  border-radius: 12px;
-  padding: 12px;
-  text-align: center;
-  margin-top: 10px;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 8px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
 }
 
 .summary-title {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-muted);
-  margin-bottom: 2px;
 }
 
 .total-amount {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
   color: var(--main-dark);
 }
 
 .diff-amount {
-  margin-top: 4px;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .status-badge {
-  margin-top: 8px;
-  padding: 8px;
-  border-radius: 8px;
+  margin-top: 6px;
+  padding: 6px;
+  border-radius: 6px;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
+  text-align: center;
 }
 
 .status-badge.match { background: #e2f7d2; color: #3b7109; }
@@ -257,27 +297,27 @@ input[type="number"]:focus {
 
 .notice {
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-muted);
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 /* 하단 버튼 그룹 */
 .actions {
   display: flex;
-  gap: 8px;
-  margin-top: 4px;
+  gap: 6px;
+  margin-top: 2px;
 }
 
 .btn-reset {
   flex: 1;
-  height: 44px;
+  height: 40px;
   border: none;
   border-radius: 10px;
   background: var(--sub-color);
   color: #fff;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: background 0.2s;
@@ -290,16 +330,16 @@ input[type="number"]:focus {
 /* 토스트 메세지 */
 #toast {
   position: fixed;
-  bottom: 30px;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(34, 34, 34, 0.9);
   color: #fff;
-  padding: 10px 20px;
-  border-radius: 24px;
+  padding: 8px 16px;
+  border-radius: 20px;
   display: none;
   z-index: 9999;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .tab-content {
