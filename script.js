@@ -1,14 +1,14 @@
-// --- 데이터 정의 (지폐/동전 타입 분기 추가) ---
+// --- 데이터 정의 (모든 권종을 통일된 스타일로 렌더링) ---
 const remitData = [
-  { label: "10만원", value: 100000, type: "bill" },
-  { label: "5만원", value: 50000, type: "bill" },
-  { label: "1만원", value: 10000, type: "bill" },
-  { label: "5천원", value: 5000, type: "bill" },
-  { label: "1천원", value: 1000, type: "bill" },
-  { label: "500원", value: 500, type: "coin" },
-  { label: "100원", value: 100, type: "coin" },
-  { label: "50원", value: 50, type: "coin" },
-  { label: "10원", value: 10, type: "coin" }
+  { label: "10만원", value: 100000 },
+  { label: "5만원", value: 50000 },
+  { label: "1만원", value: 10000 },
+  { label: "5천원", value: 5000 },
+  { label: "1천원", value: 1000 },
+  { label: "500원", value: 500 },
+  { label: "100원", value: 100 },
+  { label: "50원", value: 50 },
+  { label: "10원", value: 10 }
 ];
 
 const exchangeData = [
@@ -31,7 +31,7 @@ function initDOM() {
   remitData.forEach((item, idx) => {
     remitHtml += `
       <div class="grid-row remit-grid">
-        <div class="denom denom-${item.type}">${item.label}</div>
+        <div class="denom">${item.label}</div>
         <button class="ctrl-btn minus" onclick="chgRemit(${idx}, -1)">-</button>
         <input type="number" id="remit-qty-${idx}" placeholder="0" min="0" oninput="calcRemit()">
         <button class="ctrl-btn" onclick="chgRemit(${idx}, 1)">+</button>
@@ -47,7 +47,7 @@ function initDOM() {
   exchangeData.forEach((item) => {
     exHtml += `
       <div class="grid-row ex-grid">
-        <div class="denom denom-bill">${item.label}</div>
+        <div class="denom">${item.label}</div>
         <div class="amount" id="ex-amt-${item.id}">0원</div>
         <div class="qty-ctrl-box">
           <button class="ctrl-btn minus" onclick="chgEx('${item.id}', -${item.step})">-</button>
