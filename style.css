@@ -25,7 +25,6 @@ body {
   min-height: 100vh;
 }
 
-/* 전체 높이 5% 축소 및 PC 웹앱에서 90% 사이즈 최적화 */
 .wrap {
   width: 90%;
   max-width: 390px;
@@ -35,12 +34,13 @@ body {
   gap: 8px;
 }
 
-/* 헤더 로고 스타일 */
+/* 헤더 로고 스타일 (이탤릭 적용) */
 .logo {
   text-align: center;
   color: var(--text-primary);
   font-size: 20px;
   font-weight: 900;
+  font-style: italic;
   letter-spacing: -0.5px;
   margin: 2px 0;
 }
@@ -90,7 +90,6 @@ body {
   color: var(--text-primary);
 }
 
-/* 송금대상금액 좌우 구조 변경 */
 .flex-input-card {
   display: flex;
   align-items: center;
@@ -163,33 +162,19 @@ input[type="number"]:focus {
   border-bottom: none;
 }
 
-/* 아이콘 디자인 (지폐 / 동전) */
+/* 모든 권종을 통일된 직사각형 지폐 모양으로 설정 */
 .denom {
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 11px;
-}
-
-/* 10만원~1천원: 네모난 지폐 모양 */
-.denom-bill {
   width: 46px;
   height: 24px;
   background: #eefbee;
   border: 1.5px solid var(--main-dark);
   color: var(--main-dark);
   border-radius: 4px;
-}
-
-/* 500원~10원: 라운드형 도형 */
-.denom-coin {
-  width: 32px;
-  height: 26px;
-  background: #edf2f7;
-  border: 1.5px solid #cbd5e1;
-  color: #475569;
-  border-radius: 13px;
 }
 
 .amount {
@@ -250,7 +235,7 @@ input[type="number"]:focus {
   margin-left: 2px;
 }
 
-/* 요약 영역 구조 변경 */
+/* 요약 영역 */
 .summary-box {
   background: #f0f8e8;
   border-radius: 10px;
