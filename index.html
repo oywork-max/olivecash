@@ -17,8 +17,8 @@
 <body>
 
   <div class="wrap">
-    <!-- 타이틀 -->
-    <h1 class="main-title">OLIVE CASH</h1>
+    <!-- 헤더 로고 -->
+    <h1 class="logo">OLIVE <span>CASH</span></h1>
 
     <!-- 상단 탭 버튼 -->
     <div class="tab-group">
@@ -26,8 +26,8 @@
       <button class="tab-btn" onclick="switchTab('exchange')">환전 계산기</button>
     </div>
 
-    <!-- 공통: 항상 상단에 표시되는 송금대상금액 입력 카드 -->
-    <div class="card">
+    <!-- 송금대상금액 (좌우 구조 변경) -->
+    <div class="card flex-input-card">
       <div class="label">송금대상금액</div>
       <input id="remitTarget" class="target-input" type="number" placeholder="금액 입력">
     </div>
@@ -45,9 +45,14 @@
         <div id="remitList"></div>
 
         <div class="summary-box">
-          <div class="summary-title">합계 금액</div>
-          <div id="remitTotal" class="total-amount">0원</div>
-          <div id="remitDiff" class="diff-amount">차이 : 0원</div>
+          <div class="summary-row">
+            <span class="summary-title">합계 금액</span>
+            <span id="remitTotal" class="total-amount">0원</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-title">차이</span>
+            <span id="remitDiff" class="diff-amount">0원</span>
+          </div>
           <div id="remitStatus" class="status-badge match">🟢 정확히 일치</div>
         </div>
       </div>
@@ -63,8 +68,8 @@
         </div>
         <div id="exchangeList"></div>
 
-        <div class="summary-box" style="background: #f0f8e8; margin-top: 14px;">
-          <div class="summary-title">총 환전금액</div>
+        <div class="summary-box" style="background: #f0f8e8; margin-top: 10px;">
+          <div class="summary-title" style="margin-bottom: 2px;">총 환전금액</div>
           <div id="exchangeTotal" class="total-amount">0원</div>
         </div>
         <div class="notice">📸 캡쳐해서 사용하세요!</div>
